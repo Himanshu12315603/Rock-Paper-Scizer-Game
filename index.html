@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Rock paper scizer game</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+  </head>
+ <style>
+    .styled-button {
+      background-color: #6200ea; /* Button color */
+      color: #ffffff; /* Text color */
+      padding: 15px 30px;
+      border: none;
+      border-radius: 25px;
+      font-size: 18px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+    .styled-button:hover {
+      background-color: #3700b3; /* Darker shade on hover */
+      transform: scale(1.1); /* Slight zoom-in effect */
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+    }
+    .styled-button:active {
+      transform: scale(1); /* Reset zoom effect when clicked */
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    }
+    body {
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: Arial, sans-serif;
+      overflow: hidden;
+    }
+
+    /* Animated Gradient Background */
+    body::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(45deg, #ff9a9e, #fad0c4, #fbc2eb, #a18cd1, #fad0c4);
+      background-size: 400% 400%;
+      animation: gradientAnimation 12s ease infinite;
+      z-index: -2; /* Push it far behind the content */
+    }
+
+    @keyframes gradientAnimation {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* Particle Effect Overlay */
+    canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1; /* Behind content but above gradient */
+    }
+
+  </style>
+  <body>
+    <button class="styled-button" onclick=" playGame('rock')"> rock </button>
+
+    <button class="styled-button" onclick=" playGame('paper')"> paper </button>
+
+    <button class="styled-button" onclick=" playGame('scizer')"> scizer </button>
+
+    <script>
+    function playGame(playerMove) {
+      const pickMove = computerMove();
+      let result='';
+      if(playerMove==='rock') {
+        if(pickMove==='scizer') {
+          result='You won'
+        }else if(pickMove==='rock') {
+          result='tie'
+        }else if(pickMove==='paper') {
+          result='You loss'
+        }
+      }else if(playerMove==='paper') {
+        if(pickMove==='scizer') {
+          result='You loss'
+        }else if(pickMove==='rock') {
+          result='tie'
+        }else if(pickMove==='paper') {
+          result='tie'
+        }
+      }else if(playerMove==='scizer') {
+        if(pickMove==='scizer') {
+          result='tie'
+        }else if(pickMove==='rock') {
+          result='You loss'
+        }else if(pickMove==='paper') {
+          result='You won'
+        }
+      }
+
+      alert(`You Picked ${playerMove} Compuer Picked ${pickMove}. ${result}`);
+    }
+
+    function computerMove() {
+      let randomNum=Math.random()
+      let result='';
+      if(randomNum>=0 && randomNum<=1/3) {
+        result='rock'
+      }else if(randomNum >1/3 && randomNum<=2/3) {
+        result='paper'
+      }else if (randomNum > 2/3 && randomNum <= 3/3) {
+        result='scizer'
+      }
+        return result;
+    }
+    </script> 
+
+  </body>
+</html>
