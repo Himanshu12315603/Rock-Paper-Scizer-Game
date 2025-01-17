@@ -7,7 +7,7 @@ This is sample Project.
 
 ## Screenshot
 
-![Homepage Screenshot](Homepage.png)
+![Homepage Screenshot](HomePage.png)
 
 ## Features
 
