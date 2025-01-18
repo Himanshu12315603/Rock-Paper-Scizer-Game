@@ -7,7 +7,10 @@ This is sample Project.
 
 ## Screenshot
 
-![Homepage Screenshot] (HomePage.png)
+![Homepage Screenshot](HomePage.png)
+
+<img src="HomePage.png" alt="Homepage Screenshot" width="600">
+
 
 ## Features
 
