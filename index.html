@@ -18,6 +18,7 @@
       transition: all 0.3s ease;
       box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
     }
+
     .styled-button:hover {
       background-color: #3700b3; /* Darker shade on hover */
       transform: scale(1.1); /* Slight zoom-in effect */
@@ -27,6 +28,8 @@
       transform: scale(1); /* Reset zoom effect when clicked */
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
     }
+
+    /*Work on body where i have added some coded interview*/
     body {
       margin: 0;
       height: 100vh;
@@ -75,7 +78,20 @@
 
     <button class="styled-button" onclick=" playGame('scizer')"> scizer </button>
 
+    <button class="styled-button" onclick=" 
+
+      score.win=0;
+      score.losses=0;
+      score.tie=0;
+      "> Reset </button>
+
     <script>
+    const score = {
+      win: 0,
+      losses: 0,
+      tie: 0
+    };
+
     function playGame(playerMove) {
       const pickMove = computerMove();
       let result='';
@@ -104,8 +120,16 @@
           result='You won'
         }
       }
+      if(result==='You won') {
+        score.win++;
+      }else if(result==='You loss') {
+        score.losses++;
+      }else {
+        score.tie++;
+      }
 
-      alert(`You Picked ${playerMove} Computer Picked ${pickMove}. ${result}`);
+      alert(`You Picked ${playerMove} Computer Picked ${pickMove}. ${result}
+Wins: ${score.win}, Losses: ${score.losses}, Tie: ${score.tie}`);
     }
 
     function computerMove() {
