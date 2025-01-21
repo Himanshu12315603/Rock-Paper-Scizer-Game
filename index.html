@@ -4,6 +4,7 @@
     <title>Rock paper scizer game</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="" href="main.css">
   </head>
  <style>
     .styled-button {
@@ -78,8 +79,7 @@
 
     <button class="styled-button" onclick=" playGame('scizer')"> scizer </button>
 
-    <button class="styled-button" onclick=" 
-
+    <button class="styled-button"  onclick=" 
       score.win=0;
       score.losses=0;
       score.tie=0;
@@ -132,6 +132,7 @@
 Wins: ${score.win}, Losses: ${score.losses}, Tie: ${score.tie}`);
     }
 
+    // This will show a random number for Rock scizer paper
     function computerMove() {
       let randomNum=Math.random()
       let result='';
