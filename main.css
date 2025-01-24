@@ -1,7 +1,13 @@
-*p {
-  background: black;
-  flex: 1 1 auto;
-  display: flex;
-}
-
+    .styled-button {
+      background-color: #6200ea; /* Button color */
+      color: #ffffff; /* Text color */
+      padding: 15px 30px;
+      border: none;
+      border-radius: 25px;
+      font-size: 18px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
 
