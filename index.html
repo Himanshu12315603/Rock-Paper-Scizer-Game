@@ -7,10 +7,6 @@
     <link rel="stylesheet"  href="main.css">
   </head>
  <style>
-    .styled-button:active {
-      transform: scale(1); /* Reset zoom effect when clicked */
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-    }
 
     /*Work on body where i have added some coded interview*/
     body {
@@ -74,6 +70,8 @@
       tie: 0
     };
 
+    //JSON.parse(localStorage.getItem('score'));
+
     function playGame(playerMove) {
       const pickMove = computerMove();
       let result='';
@@ -102,6 +100,7 @@
           result='You won'
         }
       }
+
       if(result==='You won') {
         score.win++;
       }else if(result==='You loss') {
@@ -109,6 +108,9 @@
       }else {
         score.tie++;
       }
+
+      //localStorage.setItem('score', JSON.stringify(score));
+      console.log('hel');
 
       alert(`You Picked ${playerMove} Computer Picked ${pickMove}. ${result}
 Wins: ${score.win}, Losses: ${score.losses}, Tie: ${score.tie}`);

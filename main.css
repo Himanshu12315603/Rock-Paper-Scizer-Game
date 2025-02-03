@@ -11,3 +11,13 @@
       box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
     }
 
+    .styled-button:hover {
+      background-color: #3700b3; /* Darker shade on hover */
+      transform: scale(1.1); /* Slight zoom-in effect */
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    .styled-button:active {
+      transform: scale(1); /* Reset zoom effect when clicked */
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    }
