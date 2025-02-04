@@ -61,16 +61,27 @@
       score.win=0;
       score.losses=0;
       score.tie=0;
+      localStorage.removeItem('score');
       "> Reset </button>
 
     <script>
-    const score = {
+
+    // this will save our project more permanently
+    let score = JSON.parse(localStorage.getItem('score')) || {
       win: 0,
       losses: 0,
       tie: 0
     };
-
-    //JSON.parse(localStorage.getItem('score'));
+    
+    /*
+    if(score === null) { //(!score)     
+    score = {
+        wins: 0,
+        losses: 0,
+        tie: 0     
+      }     
+    }
+    */
 
     function playGame(playerMove) {
       const pickMove = computerMove();
@@ -109,9 +120,10 @@
         score.tie++;
       }
 
-      //localStorage.setItem('score', JSON.stringify(score));
-      console.log('hel');
+      // it will save our score in localStorage
+      localStorage.setItem('score', JSON.stringify(score));
 
+      // This will show a alert msg in which everything is written.
       alert(`You Picked ${playerMove} Computer Picked ${pickMove}. ${result}
 Wins: ${score.win}, Losses: ${score.losses}, Tie: ${score.tie}`);
     }
