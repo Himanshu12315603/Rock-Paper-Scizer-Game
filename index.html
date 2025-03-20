@@ -4,7 +4,7 @@
     <title>Rock paper scizer game</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet"  href="main.css">
+    <!--<link rel="stylesheet"  href="main.css">-->
   </head>
  <style>
 
@@ -34,8 +34,8 @@
 
     <button class="styled-button" onclick=" playGame('scizer')"> scizer </button>
 
-    <p class="js-score"></p>
-    <p class="js-score"></p>
+    <p class="js-result"></p>
+    <p class="js-move"></p>
     <p class="js-score"></p>
 
     <button class="styled-button"  onclick=" 
@@ -56,6 +56,7 @@
     };
     
     updateScoreElement();
+
     //insded of that we can do this also
     /*
     if(score === null) { //(!score)     
@@ -109,9 +110,11 @@
 
       updateScoreElement();
 
+      document.querySelector('.js-move').innerHTML = result;
+      document.querySelector('.js-result').innerHTML = `You ${playerMove} - ${pickMove} Computer`;
+
+
       // This will show a alert msg in which everything is written.
-      alert(`You Picked ${playerMove} Computer Picked ${pickMove}. ${result}
-       Wins: ${score.win}, Losses: ${score.losses}, Tie: ${score.tie}`);
     }
 
     function updateScoreElement() {
