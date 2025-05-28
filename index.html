@@ -4,7 +4,7 @@
     <title>Rock paper scizer game</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!--<link rel="stylesheet"  href="main.css">-->
+    <!-- <link rel="stylesheet"  href="main.css"> -->
   </head>
  <style>
 
@@ -46,6 +46,10 @@
       updateScoreElement();
       "> Reset </button>
 
+    <button class="autoPlay" onclick="
+      autoPlay();
+      ">AutoPlay</button>
+
     <script>
 
     // this will save our project more permanently
@@ -67,6 +71,24 @@
       }     
     }
     */
+
+    // Auto Playing feature
+    let isAutoPlaying=false;
+    let intervalId;
+    function autoPlay() {
+      if(!isAutoPlaying) {
+        intervalId = setInterval(function() {
+          const secondplayMove = computerMove();
+          playGame(secondplayMove);
+        },1000);
+      isAutoPlaying = true;
+      } else {
+        clearInterval(intervalId);
+        isAutoPlaying = false;
+      }
+    }
+
+
 
     function playGame(playerMove) {
       const pickMove = computerMove();
