@@ -1,163 +1,198 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <title>Rock paper scizer game</title>
+<head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- <link rel="stylesheet"  href="main.css"> -->
-  </head>
- <style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rock, Paper, Scissors</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom styles for the body to create the vibrant background */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-image: linear-gradient(-45deg, #FF6B6B, #537FE7, #FFD93D);
+            background-size: 400% 400%;
+            animation: gradientAnimation 15s ease infinite;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
 
-    /*Work on body where i have added some coded interview*/
+        @keyframes gradientAnimation {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+    </style>
+</head>
+<body class="p-4">
 
-    @keyframes gradientAnimation {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
-    }
+    <!-- Game Container with semi-transparent background -->
+    <div class="flex flex-col items-center justify-center space-y-8 p-8 md:p-12 bg-white/20 backdrop-blur-md rounded-2xl shadow-2xl max-w-lg w-full text-center">
 
-    /* Particle Effect Overlay */
-    canvas {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: -1; /* Behind content but above gradient */
-    }
+        <h1 class="text-4xl md:text-5xl font-bold text-white drop-shadow-lg">Rock Paper Scissors</h1>
 
-  </style>
-  <body>
-    <button class="styled-button" onclick=" playGame('rock')"> rock </button>
+        <!-- Player choices -->
+        <div class="flex justify-center space-x-4 md:space-x-6">
+            <button class="choice-button" onclick="playGame('rock')">
+                <span class="text-3xl md:text-4xl">✊</span>
+                <span class="mt-2 text-sm md:text-base">Rock</span>
+            </button>
+            <button class="choice-button" onclick="playGame('paper')">
+                <span class="text-3xl md:text-4xl">🖐️</span>
+                <span class="mt-2 text-sm md:text-base">Paper</span>
+            </button>
+            <button class="choice-button" onclick="playGame('scissors')">
+                <span class="text-3xl md:text-4xl">✌️</span>
+                <span class="mt-2 text-sm md:text-base">Scissors</span>
+            </button>
+        </div>
+        
+        <!-- Game feedback area -->
+        <div class="w-full space-y-4">
+            <p class="js-move text-xl md:text-2xl font-semibold text-white drop-shadow-md"></p>
+            <p class="js-result text-2xl md:text-3xl font-extrabold text-yellow-300 drop-shadow-lg"></p>
+            <p class="js-score text-lg md:text-xl font-medium text-white drop-shadow-md"></p>
+        </div>
 
-    <button class="styled-button" onclick=" playGame('paper')"> paper </button>
+        <!-- Action buttons -->
+        <div class="flex flex-col md:flex-row justify-center space-y-4 md:space-y-0 md:space-x-4">
+            <button class="styled-button-reset" onclick="resetScore()">Reset Score</button>
+            <button class="styled-button-auto-play" onclick="autoPlay()">Auto-Play</button>
+        </div>
 
-    <button class="styled-button" onclick=" playGame('scizer')"> scizer </button>
-
-    <p class="js-result"></p>
-    <p class="js-move"></p>
-    <p class="js-score"></p>
-
-    <button class="styled-button"  onclick=" 
-      score.win=0;
-      score.losses=0;
-      score.tie=0;
-      localStorage.removeItem('score');
-      updateScoreElement();
-      "> Reset </button>
-
-    <button class="autoPlay" onclick="
-      autoPlay();
-      ">AutoPlay</button>
+    </div>
 
     <script>
+        // Use a more descriptive name for the score object and initialize from localStorage
+        let score = JSON.parse(localStorage.getItem('rockPaperScissorsScore')) || {
+            wins: 0,
+            losses: 0,
+            ties: 0
+        };
 
-    // this will save our project more permanently
-    let score = JSON.parse(localStorage.getItem('score')) || {
-      win: 0,
-      losses: 0,
-      tie: 0
-    };
-    
-    updateScoreElement();
+        // Update the score display on page load
+        updateScoreElement();
 
-    //insded of that we can do this also
-    /*
-    if(score === null) { //(!score)     
-    score = {
-        wins: 0,
-        losses: 0,
-        tie: 0     
-      }     
-    }
-    */
+        // Variable for the autoplay functionality
+        let isAutoPlaying = false;
+        let intervalId;
 
-    // Auto Playing feature
-    let isAutoPlaying=false;
-    let intervalId;
-    function autoPlay() {
-      if(!isAutoPlaying) {
-        intervalId = setInterval(function() {
-          const secondplayMove = computerMove();
-          playGame(secondplayMove);
-        },1000);
-      isAutoPlaying = true;
-      } else {
-        clearInterval(intervalId);
-        isAutoPlaying = false;
-      }
-    }
-
-
-
-    function playGame(playerMove) {
-      const pickMove = computerMove();
-      let result='';
-      if(playerMove==='rock') {
-        if(pickMove==='scizer') {
-          result='You won'
-        }else if(pickMove==='rock') {
-          result='tie'
-        }else if(pickMove==='paper') {
-          result='You loss'
+        // Function to handle autoplay
+        function autoPlay() {
+            const autoPlayButton = document.querySelector('.styled-button-auto-play');
+            if (!isAutoPlaying) {
+                // Start autoplay
+                intervalId = setInterval(() => {
+                    const computerMove = pickComputerMove();
+                    playGame(computerMove);
+                }, 1000);
+                isAutoPlaying = true;
+                autoPlayButton.textContent = 'Stop Auto-Play';
+                autoPlayButton.classList.remove('bg-blue-500', 'hover:bg-blue-600');
+                autoPlayButton.classList.add('bg-red-500', 'hover:bg-red-600');
+            } else {
+                // Stop autoplay
+                clearInterval(intervalId);
+                isAutoPlaying = false;
+                autoPlayButton.textContent = 'Auto-Play';
+                autoPlayButton.classList.remove('bg-red-500', 'hover:bg-red-600');
+                autoPlayButton.classList.add('bg-blue-500', 'hover:bg-blue-600');
+            }
         }
-      }else if(playerMove==='paper') {
-        if(pickMove==='scizer') {
-          result='You loss'
-        }else if(pickMove==='rock') {
-          result='You won'
-        }else if(pickMove==='paper') {
-          result='tie'
+
+        // Main game logic function
+        function playGame(playerMove) {
+            const computerMove = pickComputerMove();
+            let result = '';
+
+            // Determine the winner
+            if (playerMove === 'rock') {
+                if (computerMove === 'scissors') {
+                    result = 'You won!';
+                } else if (computerMove === 'paper') {
+                    result = 'You lost.';
+                } else {
+                    result = 'Tie.';
+                }
+            } else if (playerMove === 'paper') {
+                if (computerMove === 'rock') {
+                    result = 'You won!';
+                } else if (computerMove === 'scissors') {
+                    result = 'You lost.';
+                } else {
+                    result = 'Tie.';
+                }
+            } else if (playerMove === 'scissors') {
+                if (computerMove === 'paper') {
+                    result = 'You won!';
+                } else if (computerMove === 'rock') {
+                    result = 'You lost.';
+                } else {
+                    result = 'Tie.';
+                }
+            }
+
+            // Update score based on result
+            if (result === 'You won!') {
+                score.wins++;
+            } else if (result === 'You lost.') {
+                score.losses++;
+            } else {
+                score.ties++;
+            }
+
+            // Save the score to localStorage
+            localStorage.setItem('rockPaperScissorsScore', JSON.stringify(score));
+
+            // Update the display elements
+            updateScoreElement();
+            document.querySelector('.js-move').innerHTML = `You picked ${playerMove}, computer picked ${computerMove}.`;
+            document.querySelector('.js-result').innerHTML = result;
         }
-      }else if(playerMove==='scizer') {
-        if(pickMove==='scizer') {
-          result='tie'
-        }else if(pickMove==='rock') {
-          result='You loss'
-        }else if(pickMove==='paper') {
-          result='You won'
+
+        // Function to reset the score
+        function resetScore() {
+            score.wins = 0;
+            score.losses = 0;
+            score.ties = 0;
+            localStorage.removeItem('rockPaperScissorsScore');
+            updateScoreElement();
+            document.querySelector('.js-move').innerHTML = '';
+            document.querySelector('.js-result').innerHTML = '';
         }
-      }
 
-      if(result==='You won') {
-        score.win++;
-      }else if(result==='You loss') {
-        score.losses++;
-      }else {
-        score.tie++;
-      }
+        // Function to update the score display
+        function updateScoreElement() {
+            document.querySelector('.js-score').innerHTML = `Wins: ${score.wins}, Losses: ${score.losses}, Ties: ${score.ties}`;
+        }
 
-      // it will save our score in localStorage
-      localStorage.setItem('score', JSON.stringify(score));
-
-      updateScoreElement();
-
-      document.querySelector('.js-move').innerHTML = result;
-      document.querySelector('.js-result').innerHTML = `You ${playerMove} - ${pickMove} Computer`;
-
-
-      // This will show a alert msg in which everything is written.
-    }
-
-    function updateScoreElement() {
-      document.querySelector('.js-score').
-        innerHTML = `Wins: ${score.win}, Losses: ${score.losses}, Tie: ${score.tie}`
-    }
-
-    // This will show a random number for Rock scizer paper
-    function computerMove() {
-      let randomNum=Math.random()
-      let result='';
-      if(randomNum>=0 && randomNum<=1/3) {
-        result='rock'
-      }else if(randomNum >1/3 && randomNum<=2/3) {
-        result='paper'
-      }else if (randomNum > 2/3 && randomNum <= 3/3) {
-        result='scizer'
-      }
-        return result;
-    }
-    </script> 
-
-  </body>
+        // Function for the computer's move
+        function pickComputerMove() {
+            const randomNumber = Math.random();
+            if (randomNumber >= 0 && randomNumber < 1 / 3) {
+                return 'rock';
+            } else if (randomNumber >= 1 / 3 && randomNumber < 2 / 3) {
+                return 'paper';
+            } else {
+                return 'scissors';
+            }
+        }
+    </script>
+</body>
 </html>
+
+<!-- Custom button styles using Tailwind classes. You can add this in the head's style tag -->
+<style>
+    .choice-button {
+        @apply bg-white/30 text-white font-semibold rounded-full w-24 h-24 flex flex-col items-center justify-center transition-all duration-300 transform hover:scale-110 hover:bg-white/40 shadow-xl;
+    }
+    .styled-button-reset {
+        @apply bg-red-500 text-white font-bold py-3 px-6 rounded-full shadow-lg transition-all duration-300 transform hover:scale-105 hover:bg-red-600;
+    }
+    .styled-button-auto-play {
+        @apply bg-blue-500 text-white font-bold py-3 px-6 rounded-full shadow-lg transition-all duration-300 transform hover:scale-105 hover:bg-blue-600;
+    }
+</style>
+
